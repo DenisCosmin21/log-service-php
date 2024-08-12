@@ -1,0 +1,166 @@
+<?php
+
+namespace Deniscosmin21\LogServicePhp;
+
+require '../vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Exception\RequestException;
+use Dotenv\Dotenv;
+
+class SendRequest
+{
+
+    private $env = null;
+
+    private function exists_env()
+    {
+        if($this->env == null){
+            $this->env = Dotenv::createImmutable(dirname(__DIR__, 4));
+            return (count($this->env->safeLoad()) != 0);
+        }
+
+        else{
+            return (count($this->env) != 0);
+        }
+    }
+
+    private function env_get($name)
+    {
+        if($this->exists_env()){
+            if(array_exists_key($name, $_ENV)){
+                return $_ENV['name'];
+            }
+        }
+        return '';
+    }
+
+    private function get_credentials_from_env()
+    {
+        $credentials['key'] = $this->env_get('API_PASS_KEY');
+        $credentials['value'] = $this->env_get('API_PASS_VALUE');
+
+        return $credentials;
+    }
+
+    public static function send_request($items = [])
+    {
+        if($items['source'] == ''){
+            $items['source'] = $this->env_get('source');
+        }
+
+        if($items['credentials']['key'] == '' || $items['credentials']['value'] == ''){
+            if($this->exists_env() == true){
+                $credentials = $this->get_credentials_from_env();
+                $items['credentials'] = $credentials;
+            }
+            else{
+                $this->write_to_log_file($items);
+            }
+        }
+        $client = new Client([
+            'auth' => [$items['credentials']['key'], $items['credentials']['value']]
+        ]);
+
+        $headers = [
+          'Content-Type' => 'application/x-www-form-urlencoded',
+          'Authorization' => 'Basic'
+        ];
+
+
+        $options = [
+        'form_params' => [
+          'source' => $items['source'],
+          'type' => $items['type'],
+          'location' => $items['location'],
+          'details' => $items['details'],
+          'send_notification' => $items['send_notification'],
+          'email_list' => $items['email_list'],
+          'phone_number' => $items['phone_number']
+        ]];
+
+        try{
+            $res = $client->request('POST', 'https://logs.mezoni.ro/api/send_log', $options);
+            return $res->getBody()->getContents();
+        }
+        catch(RequestException $e)
+        {
+            $response = $e->getResponse();
+            $statusCode = $response->getStatusCode();
+            if($statusCode >= 400){
+                $this->write_log_file($items);
+            }
+            return [
+                'message' => 'invalid request',
+                'errors' => [
+                    'status_code' => $statusCode,
+                    'response' => 'Invalid request'
+                ]
+            ];
+        }
+    }
+
+    private function get_log_file_path($type)
+    {
+        $file_path = '../../../../';
+
+        $name_by_type = [
+            'error' => 'error.log',
+            'success' => 'success.log',
+            'warning' => 'warning.log',
+            'info' => 'info.log',
+        ];
+        
+        $file_path = ($this->env_get('custom_path') == '' ? $file_path : $this->env_get('custom_path'));
+
+        $name_by_type['error'] = ($this->env_get('error_name') == '' ? $name_by_type['error'] : $this->env_get('error_name') . '.log');
+        $name_by_type['info'] = ($this->env_get('info_name') == '' ? $name_by_type['info'] : $this->env_get('info_name') . '.log');
+        $name_by_type['warning'] = ($this->env_get('warning_name') == '' ? $name_by_type['warning'] : $this->env_get('warning_name') . '.log');
+        $name_by_type['success'] = ($this->env_get('success_name') == '' ? $name_by_type['success'] : $this->env_get('success_name') . '.log');
+
+        $check_name = explode('.', $name_by_type[$type]);
+        if(count($check_name) > 2){
+            $count = array_count_values($check_name);
+            if($count['log'] > 1){
+                array_pop($check_name);
+                $name_by_type[$type] = implode('.', $check_name);
+            }
+        }
+
+        if($file_path == '../../../../'){
+            $file_path = $file_path . '/log_records';
+        }
+
+        if(!is_dir($file_path)){
+            mkdir($file_path, 0755, true);
+        }
+
+        return fopen($file_path . DIRECTORY_SEPARATOR . $name_by_type[$type], 'a');
+    }
+
+    private function make_message($items)
+    {
+        $date = date('Y-m-d');
+        $time = date('h:i:sa');
+
+        $message = '[' . strtoupper($items['type']) . ' log, in date : ' . $date . ' ' . $time . ']';
+        $message = $message . ' : Detalii : ' . $items['details'] . 'Locatie : ' . $items['location'];
+
+        return $message;
+    }
+
+    private function write_to_log_file($items)
+    {
+        $type = $items['type'];
+
+        $file = $this->get_log_file_path($type);
+        
+        if($file){
+            $message = $this->make_message($items);
+            fwrite($file, $message);
+        }
+    }
+}
+
+var_dump(SendRequest::send_request());

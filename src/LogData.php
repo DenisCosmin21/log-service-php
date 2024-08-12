@@ -1,0 +1,107 @@
+<?php
+
+namespace Deniscosmin21\LogServicePhp;
+
+use Deniscosmin21\LogServicePhp\SendRequest;
+
+class LogData
+{
+
+    private $source_name = '';
+    private $type = '';
+    private $details = '';
+    private $send_notification = '';
+    private $email_list = '';
+    private $location = '';
+    private $phone_number = '';
+    private $credentials = ['key' => '', 'value' => ''];
+
+    public function __construct($source = '')
+    {
+        $this->source($source);
+        $location = debug_backtrace()[1];
+
+        if(array_key_exists('class', $location)){
+            $this->location = $this->location . $location['class'] . ' ';
+        }
+
+        $this->location = $this->location . $location['function'];
+
+    }
+
+    public function source($source)
+    {
+        $this->source_name = $source;
+        return $this;
+    }
+
+    public function __call($name, $arguments)
+    {
+        if(count($arguments) == 0){
+            $details = '';
+        }
+        else{
+            $details = $arguments[0];
+        }
+
+        if($name == 'info' || $name == 'Info'){
+            $type = 'info';
+        }
+        else if($name == 'error' || $name == 'Error')
+        {
+            $type = 'error';
+        }
+        else if($name == 'warning' || $name == 'Warning')
+        {
+            $type = 'warning';
+        }
+        else if($name == 'success' || $name == 'Success')
+        {
+            $type = 'success';
+        }
+
+        return $this->details($type, $details);
+    }
+
+    public function details($type = 'info', $details = '')
+    {
+        $this->type = $type;
+        $this->data = $data;
+        return $this;
+    }
+
+    public function email($email_list)
+    {
+        $this->send_notification = 'email';
+        if(gettype($email_list) == 'string'){
+            $this->email_list = $email_list;
+        }
+        else{
+            $this->email_list = implode(',', $email_list);
+        }
+
+        return $this;
+    }
+
+    public function sms($phone_number)
+    {
+        $this->send_notification = 'email_and_sms';
+        $this->phone_number = $phone_number;
+
+        return $this;
+    }
+
+    public function credentials($key, $value)
+    {
+        $this->key == $key;
+        $this->value = $value;
+        return $this;
+    }
+
+    public function send()
+    {
+        $items = ['source' => $this->source, 'type' => $this->type, 'location' => $this->location, 'details' => $this->details, 'send_notification' => $this->send_notification, 'email_list' => $this->email_list, 'phone_number' => $this->phone_number, 'credentials' => $this->credentials];
+
+        return SendRequest::send_request($items);
+    }
+}
