@@ -10,7 +10,7 @@ class Logger
     private $source = '';
     private $type = '';
     private $details = '';
-    private $send_notification = '';
+    private $send_notification = 'false';
     private $email_list = '';
     private $location = '';
     private $phone_number = '';
