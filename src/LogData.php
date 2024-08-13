@@ -25,13 +25,17 @@ class Logger
         }
         
         $location = debug_backtrace()[$id];
-
-        if(array_key_exists('class', $location)){
-            $this->location = $this->location . $location['class'];
+        if($location != null){
+            if(array_key_exists('class', $location)){
+                $this->location = $this->location . $location['class'];
+            }
+    
+            $this->location = $this->location . ' ' . $location['function'];
         }
-
-        $this->location = $this->location . ' ' . $location['function'];
-
+        else{
+            $location = debug_backtrace()[1];
+            $this->location = $location['file'];
+        }
     }
 
     public function source($source)
