@@ -27,10 +27,10 @@ class Logger
         $location = debug_backtrace()[$id];
 
         if(array_key_exists('class', $location)){
-            $this->location = $this->location . $location['class'] . ' ';
+            $this->location = $this->location . $location['class'];
         }
 
-        $this->location = $this->location . ' ' $location['function'];
+        $this->location = $this->location . ' ' . $location['function'];
 
     }
 
@@ -125,6 +125,6 @@ class LogData
     public static function __callStatic($name, $arguments)
     {
         $log = new Logger(true);
-        return $logger->$name($arguments);
+        return $log->$name($arguments);
     }    
 }
