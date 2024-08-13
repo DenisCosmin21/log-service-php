@@ -66,7 +66,7 @@ class LogData
     public function details($type = 'info', $details = '')
     {
         $this->type = $type;
-        $this->data = $data;
+        $this->details = $details;
         return $this;
     }
 

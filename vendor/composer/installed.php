@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'deniscosmin21/log-service-php',
-        'pretty_version' => '1.0.0+no-version-set',
-        'version' => '1.0.0.0',
-        'reference' => null,
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
+        'reference' => '1fe38c3fb1830c56634c3a1ad0af95942f662fde',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -11,9 +11,9 @@
     ),
     'versions' => array(
         'deniscosmin21/log-service-php' => array(
-            'pretty_version' => '1.0.0+no-version-set',
-            'version' => '1.0.0.0',
-            'reference' => null,
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
+            'reference' => '1fe38c3fb1830c56634c3a1ad0af95942f662fde',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -29,9 +29,9 @@
             'dev_requirement' => false,
         ),
         'guzzlehttp/guzzle' => array(
-            'pretty_version' => '7.9.2',
-            'version' => '7.9.2.0',
-            'reference' => 'd281ed313b989f213357e3be1a179f02196ac99b',
+            'pretty_version' => '7.8.1',
+            'version' => '7.8.1.0',
+            'reference' => '41042bc7ab002487b876a0683fc8dce04ddce104',
             'type' => 'library',
             'install_path' => __DIR__ . '/../guzzlehttp/guzzle',
             'aliases' => array(),
