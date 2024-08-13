@@ -7,7 +7,7 @@ use Deniscosmin21\LogServicePhp\SendRequest;
 class LogData
 {
 
-    private $source_name = '';
+    private $source = '';
     private $type = '';
     private $details = '';
     private $send_notification = '';
@@ -31,7 +31,7 @@ class LogData
 
     public function source($source)
     {
-        $this->source_name = $source;
+        $this->source = $source;
         return $this;
     }
 
@@ -102,6 +102,7 @@ class LogData
     {
         $items = ['source' => $this->source, 'type' => $this->type, 'location' => $this->location, 'details' => $this->details, 'send_notification' => $this->send_notification, 'email_list' => $this->email_list, 'phone_number' => $this->phone_number, 'credentials' => $this->credentials];
 
-        return SendRequest::send_request($items);
+        $req = new SendRequest();
+        return $req->send_request($items);
     }
 }
