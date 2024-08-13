@@ -14,7 +14,7 @@ class SendRequest
 
     private $env = null;
 
-    public static function send_request($items = [])
+    public function send_request($items = [])
     {
         if($items['source'] == ''){
             $items['source'] = $this->env_get('source');
