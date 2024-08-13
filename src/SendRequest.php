@@ -70,7 +70,7 @@ class SendRequest
 
     private function get_log_file_path($type)
     {
-        $file_path = '../../../../';
+        $file_path = dirname(__DIR__, 4);
 
         $name_by_type = [
             'error' => 'error.log',
@@ -95,7 +95,7 @@ class SendRequest
             }
         }
 
-        if($file_path == '../../../../'){
+        if($file_path == dirname(__DIR__, 4)){
             $file_path = $file_path . '/log_records';
         }
 
