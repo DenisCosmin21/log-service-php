@@ -37,30 +37,41 @@ class LogData
 
     public function __call($name, $arguments)
     {
-        if(count($arguments) == 0){
-            $details = '';
+        if($name != 'credentials'){
+            if(count($arguments) == 0){
+                $details = '';
+            }
+            else{
+                $details = $arguments[0];
+            }
+    
+            if($name == 'info' || $name == 'Info'){
+                $type = 'info';
+            }
+            else if($name == 'error' || $name == 'Error')
+            {
+                $type = 'error';
+            }
+            else if($name == 'warning' || $name == 'Warning')
+            {
+                $type = 'warning';
+            }
+            else if($name == 'success' || $name == 'Success')
+            {
+                $type = 'success';
+            }
+
+            return $this->details($type, $details);
         }
         else{
-            $details = $arguments[0];
+            if(gettype($arguments[0]) == 'array'){
+                $this->credentials = $arguments[0];
+            }
+            else{
+                $this->credentials = ['key' => $arguments[0], 'value' => $arguments[1]];
+            }
+            return $this;
         }
-
-        if($name == 'info' || $name == 'Info'){
-            $type = 'info';
-        }
-        else if($name == 'error' || $name == 'Error')
-        {
-            $type = 'error';
-        }
-        else if($name == 'warning' || $name == 'Warning')
-        {
-            $type = 'warning';
-        }
-        else if($name == 'success' || $name == 'Success')
-        {
-            $type = 'success';
-        }
-
-        return $this->details($type, $details);
     }
 
     public function details($type = 'info', $details = '')
@@ -88,13 +99,6 @@ class LogData
         $this->send_notification = 'email_and_sms';
         $this->phone_number = $phone_number;
 
-        return $this;
-    }
-
-    public function credentials($key, $value)
-    {
-        $this->key == $key;
-        $this->value = $value;
         return $this;
     }
 
