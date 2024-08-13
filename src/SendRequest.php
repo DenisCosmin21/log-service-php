@@ -22,7 +22,7 @@ class SendRequest
 
         if($items['credentials']['key'] == '' || $items['credentials']['value'] == ''){
             if($this->exists_env() == true){
-                $items['credentials'] = ['key' => $this->env_get('API_PASS_KEY'), 'value' => $this->env_get('API_PASS_VALUE');
+                $items['credentials'] = ['key' => $this->env_get('API_PASS_KEY'), 'value' => $this->env_get('API_PASS_VALUE')];
             }
             else{
                 $this->write_to_log_file($items);
