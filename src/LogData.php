@@ -125,6 +125,6 @@ class LogData
     public static function __callStatic($name, $arguments)
     {
         $log = new Logger(true);
-        return $log->$name($arguments);
+        return $log->$name(...$arguments);
     }    
 }
