@@ -81,12 +81,12 @@ class SendRequest
             'info' => 'info.log',
         ];
         
-        $file_path = ($this->env_get('custom_path') == '' ? $file_path : $this->env_get('custom_path'));
+        $file_path = ($this->env_get('CUSTOM_PATH') == '' ? $file_path : $this->env_get('CUSTOM_PATH'));
 
-        $name_by_type['error'] = ($this->env_get('error_name') == '' ? $name_by_type['error'] : $this->env_get('error_name') . '.log');
-        $name_by_type['info'] = ($this->env_get('info_name') == '' ? $name_by_type['info'] : $this->env_get('info_name') . '.log');
-        $name_by_type['warning'] = ($this->env_get('warning_name') == '' ? $name_by_type['warning'] : $this->env_get('warning_name') . '.log');
-        $name_by_type['success'] = ($this->env_get('success_name') == '' ? $name_by_type['success'] : $this->env_get('success_name') . '.log');
+        $name_by_type['error'] = ($this->env_get('ERROR_NAME') == '' ? $name_by_type['error'] : $this->env_get('ERROR_NAME') . '.log');
+        $name_by_type['info'] = ($this->env_get('INFO_NAME') == '' ? $name_by_type['info'] : $this->env_get('INFO_NAME') . '.log');
+        $name_by_type['warning'] = ($this->env_get('WARNING_NAME') == '' ? $name_by_type['warning'] : $this->env_get('WARNING_NAME') . '.log');
+        $name_by_type['success'] = ($this->env_get('SUCCESS_NAME') == '' ? $name_by_type['success'] : $this->env_get('SUCCESS_NAME') . '.log');
 
         $check_name = explode('.', $name_by_type[$type]);
         if(count($check_name) > 2){
