@@ -25,24 +25,18 @@ require '../vendor/autoload.php';
 to use the namespaces from composer packages
 
 Initialization
+```php
+use Deniscosmin21\LogServicePhp\LogData;
+```
+
+Specify source
 
 ```php
 use Deniscosmin21\LogServicePhp\LogData;
 
 $logger = new LogData();
-```
-Specify source
 
-You can either you the constructor way of adding the source
-
-```php
-$logger = new LogData('source');
-```
-Or you can use the custom method
-```php
-$logger = new LogData();
-
-$logger->source('source');
+LogData::source('source');
 ```
 This is not mandatory to do if you specified the source in the .env file
 
@@ -52,78 +46,72 @@ You can either use the custom methods that feel like laravel
 ```php
 use Deniscosmin21\LogServicePhp\LogData;
 
-$logger = new LogData();
+LogData::info() #for informational log
 
-$logger->info() #for informational log
+LogData::error() #for error log
 
-$logger->error() #for error log
+LogData::warning() #for warning log
 
-$logger->warning() #for warning log
-
-$logger->success() #for success log
+LogData::success() #for success log
 ```
 You can even specify the message of the log inside
 ```php
-$logger->info('my custom message');
+LogData::info('my custom message');
 ```
 Or you can use
 ```php
-$logger->details('the_type_of_log_you_want', 'your_log_message');
+LogData::details('the_type_of_log_you_want', 'your_log_message');
 ```
 #the first parameter is the type, and the second parameter are the details
 For sending notification about a log you can use email method with the parameter a string of emails for example
 
 "test@test.com,test2@test.com" "test@test.com"
 ```php
-$logger->email('your_email_string_list_here');
+LogData::email('your_email_string_list_here');
 ```
 Or you can send an array of emails for example
 ```php
-$logger->email($your_email_array_list_here);
+LogData::email($your_email_array_list_here);
 ```
 #the array should look like this : [(0) => 'first_email', (1) => 'second_email']
 By using the email method you can specify as many emails as you want
 
 For sending the notification to sms you can use
 ```php
-$logger->sms('07....');
+LogData::sms('07....');
 ```
 But keep in mind that this method makes the log to be sent to sms and to email so the usage should be like this
 ```php
-$logger->email('emails')->sms('07....');
+LogData::email('emails')->sms('07....');
 ```
 To use the api credentials you can either use the string for each value
 
 ```php
-$logger->credentials('credentials_key', 'credentials_value');
+LogData::credentials('credentials_key', 'credentials_value');
 ```
 Or you can use an array with the content : ['key' => 'credentials_key', 'value' => 'credentials_value']
 
 ```php
-$logger->credentials(['key => 'credentials_key', 'value' => 'credentials_value']);
+LogData::credentials(['key => 'credentials_key', 'value' => 'credentials_value']);
 ```
 It's not mandatory to specify the credentials if you specified them inside the .env file
 
 To send the log after setting all the information just use
 
 ```php
-$logger->send();
+LogData::send();
 ```
 Full usage example
 ```php
 use Deniscosmin21\LogServicePhp\LogData;
 
-$logger = new LogData('my_source');
-
-return $logger->info('my_info_log')->email('test@gmail.com')->credentials('key', 'value')->send();
+return LogData::info('my_info_log')->source('source')->email('test@gmail.com')->credentials('key', 'value')->send();
 ```
 Or if the .env file is all setted up
 ```php
 use Deniscosmin21\LogServicePhp\LogData;
 
-$logger = new LogData();
-
-return $logger->info('my_info_log')->email('test@gmail.com')->send();
+return LogData::info('my_info_log')->email('test@gmail.com')->send();
 ```
 More informations
 In case of error of the request the logger will return a response with the message specified, and the errors that it has. If any errors happen, the log will be registered locally in the path specified in the .env file or basic paths, with the body of the log : "[log_type log, in date : date_time_of_log] : Detalii : details; Locatie : location of the log.
