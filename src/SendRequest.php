@@ -125,7 +125,7 @@ class SendRequest
         
         if($file){
             $message = $this->make_message($items);
-            fwrite($file, $message);
+            fwrite($file, $message . PHP_EOL);
         }
     }
 
