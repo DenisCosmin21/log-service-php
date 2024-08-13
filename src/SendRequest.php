@@ -58,7 +58,7 @@ class SendRequest
             $response = $e->getResponse();
             $statusCode = $response->getStatusCode();
             if($statusCode >= 400){
-                $this->write_log_file($items);
+                $this->write_to_log_file($items);
             }
             return [
                 'message' => 'invalid request',
@@ -143,8 +143,8 @@ class SendRequest
     private function env_get($name)
     {
         if($this->exists_env()){
-            if(array_exists_key($name, $_ENV)){
-                return $_ENV['name'];
+            if(array_key_exists($name, $_ENV)){
+                return $_ENV[$name];
             }
         }
         return '';
