@@ -4,7 +4,7 @@ namespace Deniscosmin21\LogServicePhp;
 
 use Deniscosmin21\LogServicePhp\SendRequest;
 
-class LogData
+class Logger
 {
 
     private $source = '';
@@ -16,16 +16,21 @@ class LogData
     private $phone_number = '';
     private $credentials = ['key' => '', 'value' => ''];
 
-    public function __construct($source = '')
+    public function __construct($is_from_static = false)
     {
-        $this->source($source);
-        $location = debug_backtrace()[1];
+        $id = 1;
+        if($is_from_static)
+        {
+            $id = 2;
+        }
+        
+        $location = debug_backtrace()[$id];
 
         if(array_key_exists('class', $location)){
             $this->location = $this->location . $location['class'] . ' ';
         }
 
-        $this->location = $this->location . $location['function'];
+        $this->location = $this->location . ' ' $location['function'];
 
     }
 
@@ -38,6 +43,10 @@ class LogData
     public function __call($name, $arguments)
     {
         if($name != 'credentials'){
+            
+            $details = '';
+            $type = '';
+            
             if(count($arguments) == 0){
                 $details = '';
             }
@@ -109,4 +118,13 @@ class LogData
         $req = new SendRequest();
         return $req->send_request($items);
     }
+}
+
+class LogData
+{
+    public static function __callStatic($name, $arguments)
+    {
+        $log = new Logger(true);
+        return $logger->$name($arguments);
+    }    
 }
