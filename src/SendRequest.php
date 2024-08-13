@@ -14,36 +14,6 @@ class SendRequest
 
     private $env = null;
 
-    private function exists_env()
-    {
-        if($this->env == null){
-            $this->env = Dotenv::createImmutable(dirname(__DIR__, 4));
-            return (count($this->env->safeLoad()) != 0);
-        }
-
-        else{
-            return (count($this->env) != 0);
-        }
-    }
-
-    private function env_get($name)
-    {
-        if($this->exists_env()){
-            if(array_exists_key($name, $_ENV)){
-                return $_ENV['name'];
-            }
-        }
-        return '';
-    }
-
-    private function get_credentials_from_env()
-    {
-        $credentials['key'] = $this->env_get('API_PASS_KEY');
-        $credentials['value'] = $this->env_get('API_PASS_VALUE');
-
-        return $credentials;
-    }
-
     public static function send_request($items = [])
     {
         if($items['source'] == ''){
@@ -52,8 +22,7 @@ class SendRequest
 
         if($items['credentials']['key'] == '' || $items['credentials']['value'] == ''){
             if($this->exists_env() == true){
-                $credentials = $this->get_credentials_from_env();
-                $items['credentials'] = $credentials;
+                $items['credentials'] = ['key' => $this->env_get('API_PASS_KEY'), 'value' => $this->env_get('API_PASS_VALUE');
             }
             else{
                 $this->write_to_log_file($items);
@@ -161,6 +130,24 @@ class SendRequest
             fwrite($file, $message);
         }
     }
-}
 
-var_dump(SendRequest::send_request());
+    private function exists_env()
+    {
+        if($this->env == null){
+            $this->env = Dotenv::createImmutable(dirname(__DIR__, 4));
+        }
+
+        return (count($_ENV) != 0);
+    }
+
+    private function env_get($name)
+    {
+        if($this->exists_env()){
+            if(array_exists_key($name, $_ENV)){
+                return $_ENV['name'];
+            }
+        }
+        return '';
+    }
+
+}
