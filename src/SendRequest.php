@@ -15,7 +15,7 @@ class SendRequest
     public function send_request($items)
     {
         if($items['source'] == ''){
-            $items['source'] = $this->env_get('source');
+            $items['source'] = $this->env_get('SOURCE');
         }
 
         if($items['credentials']['key'] == '' || $items['credentials']['value'] == ''){
