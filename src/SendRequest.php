@@ -73,10 +73,10 @@ class SendRequest
         $file_path = dirname(__DIR__, 4);
 
         $name_by_type = [
-            'error' => 'error.log',
-            'success' => 'success.log',
-            'warning' => 'warning.log',
-            'info' => 'info.log',
+            'error' => 'all.log',
+            'success' => 'all.log',
+            'warning' => 'all.log',
+            'info' => 'all.log',
         ];
         
         $file_path = ($this->env_get('CUSTOM_PATH') == '' ? $file_path : $this->env_get('CUSTOM_PATH'));
