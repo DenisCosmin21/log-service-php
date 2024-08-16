@@ -2,6 +2,8 @@
 
 namespace Deniscosmin21\LogServicePhp;
 
+require '../vendor/autoload.php';
+
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Exception\RequestException;
@@ -26,6 +28,7 @@ class SendRequest
                 $this->write_to_log_file($items);
             }
         }
+
         $client = new Client([
             'auth' => [$items['credentials']['key'], $items['credentials']['value']]
         ]);
@@ -51,20 +54,15 @@ class SendRequest
             $res = $client->request('POST', 'https://logs.mezoni.ro/api/send_log', $options);
             return $res->getBody()->getContents();
         }
-        catch(RequestException $e)
+       catch(RequestException $e)
         {
             $response = $e->getResponse();
             $statusCode = $response->getStatusCode();
+            $body = $response->getBody()->getContents();
             if($statusCode >= 400){
-                $this->write_to_log_file($items);
+                $this->write_to_log_file($items, $body);
             }
-            return [
-                'message' => 'invalid request',
-                'errors' => [
-                    'status_code' => $statusCode,
-                    'response' => 'Invalid request'
-                ]
-            ];
+            return $body;
         }
     }
 
@@ -117,7 +115,7 @@ class SendRequest
         return $message;
     }
 
-    private function write_to_log_file($items)
+    private function write_to_log_file($items, $body = '')
     {
         $type = $items['type'];
 
@@ -126,6 +124,10 @@ class SendRequest
         if($file){
             $message = $this->make_message($items);
             fwrite($file, $message . PHP_EOL);
+            if($body != ''){
+                fwrite($file, '[Server error response] : ' . $body . PHP_EOL);
+            }
+            fclose($file);
         }
     }
 

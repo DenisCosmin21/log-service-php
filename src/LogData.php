@@ -15,6 +15,7 @@ class Logger
     private $location = '';
     private $phone_number = '';
     private $credentials = ['key' => '', 'value' => ''];
+    private $sent = 0;
 
     public function __construct($is_from_static = false)
     {
@@ -24,7 +25,7 @@ class Logger
             $id = 2;
         }
         
-        $location = debug_backtrace()[$id];
+        $location = debug_backtrace()[1];
         if($location != null){
             if(array_key_exists('class', $location)){
                 $this->location = $this->location . $location['class'];
@@ -120,7 +121,17 @@ class Logger
         $items = ['source' => $this->source, 'type' => $this->type, 'location' => $this->location, 'details' => $this->details, 'send_notification' => $this->send_notification, 'email_list' => $this->email_list, 'phone_number' => $this->phone_number, 'credentials' => $this->credentials];
 
         $req = new SendRequest();
+
+        $this->sent = 1;
+
         return $req->send_request($items);
+    }
+
+    public function __destruct()
+    {
+        if($this->sent == 0){
+            $this->send();
+        }
     }
 }
 
