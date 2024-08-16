@@ -92,26 +92,27 @@ LogData::credentials('credentials_key', 'credentials_value');
 Or you can use an array with the content : ['key' => 'credentials_key', 'value' => 'credentials_value']
 
 ```php
-LogData::credentials(['key => 'credentials_key', 'value' => 'credentials_value']);
+LogData::credentials(['key' => 'credentials_key', 'value' => 'credentials_value']);
 ```
 It's not mandatory to specify the credentials if you specified them inside the .env file
 
 To send the log after setting all the information just use
 
 ```php
-LogData::send();
+LogData::send(); #This gets the response of the request too
+LogData::chained_metods() #no need for using send
 ```
 Full usage example
 ```php
 use Deniscosmin21\LogServicePhp\LogData;
 
-return LogData::info('my_info_log')->source('source')->email('test@gmail.com')->credentials('key', 'value')->send();
+return LogData::info('my_info_log')->source('source')->email('test@gmail.com')->credentials('key', 'value');
 ```
 Or if the .env file is all setted up
 ```php
 use Deniscosmin21\LogServicePhp\LogData;
 
-return LogData::info('my_info_log')->email('test@gmail.com')->send();
+return LogData::info('my_info_log')->email('test@gmail.com');
 ```
 More informations
 In case of error of the request the logger will return a response with the message specified, and the errors that it has. If any errors happen, the log will be registered locally in the path specified in the .env file or basic paths, with the body of the log : "[log_type log, in date : date_time_of_log] : Detalii : details; Locatie : location of the log.
