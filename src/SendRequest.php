@@ -115,7 +115,7 @@ class SendRequest
         return $message;
     }
 
-    private function write_to_log_file($items, $body = '')
+    private function write_to_log_file($items, $body = null)
     {
         $type = $items['type'];
 
@@ -124,7 +124,7 @@ class SendRequest
         if($file){
             $message = $this->make_message($items);
             fwrite($file, $message . PHP_EOL);
-            if($body != ''){
+            if($body != null){
                 fwrite($file, '[Server error response] : ' . $body . PHP_EOL);
             }
             fclose($file);
