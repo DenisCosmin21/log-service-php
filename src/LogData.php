@@ -25,8 +25,9 @@ class Logger
             $id = 2;
         }
         
-        $location = debug_backtrace()[1];
-        if($location != null){
+        $location = debug_backtrace();
+        if(array_key_exists((string)$id, $location)){
+            $location = $location[$id];
             if(array_key_exists('class', $location)){
                 $this->location = $this->location . $location['class'];
             }
@@ -34,7 +35,7 @@ class Logger
             $this->location = $this->location . ' ' . $location['function'];
         }
         else{
-            $location = debug_backtrace()[1];
+            $location = debug_backtrace()[$id - 1];
             $this->location = $location['file'];
         }
     }
