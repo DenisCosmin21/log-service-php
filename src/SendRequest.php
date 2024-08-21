@@ -49,7 +49,7 @@ class SendRequest
         ]];
 
         try{
-            $res = $client->request('POST', 'https://logs.mezoni.ro/api/send_log', $options);
+            $res = $client->request('POST', 'http://logs-mezoni-2-env.eba-2vv8tnpv.eu-central-1.elasticbeanstalk.com/api/send_log', $options);
             return $res->getBody()->getContents();
         }
        catch(RequestException $e)
