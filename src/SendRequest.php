@@ -108,7 +108,7 @@ class SendRequest
         $time = date('h:i:sa');
 
         $message = '[' . strtoupper($items['type']) . ' log, in date : ' . $date . ' ' . $time . ']';
-        $message = $message . ' : Detalii : ' . $items['details'] . 'Locatie : ' . $items['location'];
+        $message = $message . ' : Detalii : ' . $items['details'] . ' Locatie : ' . $items['location'];
 
         return $message;
     }
