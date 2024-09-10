@@ -32,11 +32,11 @@ class Logger
                 $this->location = $this->location . $location['class'];
             }
     
-            $this->location = $this->location . ' ' . $location['function'];
+            $this->location = $this->location . ' ' . $location['function'] . ' on line : ' . $location['line'];
         }
         else{
             $location = debug_backtrace()[$id - 1];
-            $this->location = $location['file'];
+            $this->location = $location['file'] . ' on line : ' . $location['line'];
         }
     }
 
