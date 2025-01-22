@@ -3,7 +3,7 @@
         'name' => 'deniscosmin21/log-service-php',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'e9f7344f486b965a744f353ce6110e72a1221c15',
+        'reference' => '91100e3778b2e0285521f9329734e617d442ef60',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'deniscosmin21/log-service-php' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'e9f7344f486b965a744f353ce6110e72a1221c15',
+            'reference' => '91100e3778b2e0285521f9329734e617d442ef60',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
