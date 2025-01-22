@@ -2,8 +2,6 @@
 
 namespace Deniscosmin21\LogServicePhp;
 
-require '../vendor/autoload.php';
-
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Exception\RequestException;
@@ -51,7 +49,7 @@ class SendRequest
         ]];
 
         try{
-            $res = $client->request('POST', 'https://logs.mezoni.ro/api/send_log', $options);
+            $res = $client->request('POST', 'http://logs-test-env.eba-jcwb4teg.eu-central-1.elasticbeanstalk.com/api/send_log', $options);
             return $res->getBody()->getContents();
         }
        catch(RequestException $e)
@@ -110,7 +108,7 @@ class SendRequest
         $time = date('h:i:sa');
 
         $message = '[' . strtoupper($items['type']) . ' log, in date : ' . $date . ' ' . $time . ']';
-        $message = $message . ' : Detalii : ' . $items['details'] . 'Locatie : ' . $items['location'];
+        $message = $message . ' : Detalii : ' . $items['details'] . ' Locatie : ' . $items['location'];
 
         return $message;
     }
