@@ -33,7 +33,8 @@ class SendRequest
 
         $headers = [
           'Content-Type' => 'application/x-www-form-urlencoded',
-          'Authorization' => 'Basic'
+          'Authorization' => 'Basic',
+            'Accept' => 'application/json',
         ];
 
 
