@@ -3,63 +3,53 @@
 namespace Deniscosmin21\LogServicePhp;
 
 use Deniscosmin21\LogServicePhp\SendRequest;
+use Deniscosmin21\LogServicePhp\Services\FileService;
 
-class Logger
+class LogData
 {
 
-    private $source = '';
-    private $type = '';
-    private $details = '';
-    private $send_notification = 'false';
-    private $email_list = '';
-    private $location = '';
-    private $phone_number = '';
-    private $credentials = ['key' => '', 'value' => ''];
-    private $sent = 0;
+    private string $source = '';
+    private string $type = '';
+    private string $details = '';
+    private string $send_notification = 'false';
+    private string $email_list = '';
+    private string $location = '';
+    private string $phone_number = '';
+    private array $credentials = [];
 
-    public function __construct($is_from_static = false)
+    public function __construct()
     {
-        $id = 1;
-        if($is_from_static)
-        {
-            $id = 2;
-        }
-        
+        $this->source = FileService::getEnv('SOURCE');
+
         $location = debug_backtrace();
-        if(array_key_exists((string)$id, $location)){
-            $location_data = $location[$id];
+        if(array_key_exists(2, $location)){
+            $location_data = $location[2];
             if(array_key_exists('class', $location_data)){
                 $this->location = $this->location . $location_data['class'];
             }
     
-            $this->location = $this->location . ' ' . $location_data['function'] . ' on line : ' . $location[$id - 1]['line'];
+            $this->location = $this->location . ' ' . $location_data['function'] . ' on line : ' . $location[1]['line'];
         }
         else{
-            $location = debug_backtrace()[$id - 1];
+            $location = debug_backtrace()[1];
             $this->location = $location['file'] . ' on line : ' . $location['line'];
         }
-    }
-
-    public function source($source)
-    {
-        $this->source = $source;
-        return $this;
     }
 
     public function __call($name, $arguments)
     {
         if($name != 'credentials'){
-            
+
             $details = '';
             $type = '';
-            
+
             if(count($arguments) == 0){
                 $details = '';
             }
             else{
                 $details = $arguments[0];
             }
-    
+
             if($name == 'info' || $name == 'Info'){
                 $type = 'info';
             }
@@ -87,6 +77,12 @@ class Logger
             }
             return $this;
         }
+    }
+
+    public function source($source)
+    {
+        $this->source = $source;
+        return $this;
     }
 
     public function details($type = 'info', $details = '')
@@ -117,30 +113,29 @@ class Logger
         return $this;
     }
 
-    public function send()
+    public function toArray() : array
     {
-        $items = ['source' => $this->source, 'type' => $this->type, 'location' => $this->location, 'details' => $this->details, 'send_notification' => $this->send_notification, 'email_list' => $this->email_list, 'phone_number' => $this->phone_number, 'credentials' => $this->credentials];
-
-        $req = new SendRequest();
-
-        $this->sent = 1;
-
-        return $req->send_request($items);
+        return [
+            'source' => $this->source,
+            'type' => $this->type,
+            'details' => $this->details,
+            'send_notification' => $this->send_notification,
+            'email_list' => $this->email_list,
+            'location' => $this->location,
+            'phone_number' => $this->phone_number,
+            'credentials' => $this->credentials
+        ];
     }
 
     public function __destruct()
     {
-        if($this->sent == 0){
-            $this->send();
+        if(isset($this->credentials['key']) && isset($this->credentials['value'])){
+            \Deniscosmin21\LogServicePhp\Facades\LogData::saveLog($this->toArray(), $this->credentials['key']);
+        }
+        else
+        {
+            \Deniscosmin21\LogServicePhp\Facades\LogData::saveLog($this->toArray());
         }
     }
 }
 
-class LogData
-{
-    public static function __callStatic($name, $arguments)
-    {
-        $log = new Logger(true);
-        return $log->$name(...$arguments);
-    }    
-}
