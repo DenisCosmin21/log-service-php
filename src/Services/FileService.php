@@ -8,7 +8,7 @@ class FileService
 
     public function findFile(string $fileName): ?string
     {
-        $path = dirname(__DIR__, 2);
+        $path = dirname(__DIR__, 5);
 
         return $this->searchDirectory($path, $fileName);
     }
@@ -50,7 +50,7 @@ class FileService
             }
 
             list($name, $value) = explode('=', $line, 2);
-            $env[trim($name)] = trim($value);
+            $env[trim($name)] = trim($value,  "\n\r\t\v\0\"");
         }
 
         return $env;
@@ -58,7 +58,7 @@ class FileService
 
     public function getLogFile(string $type) : string
     {
-        $mainPath = dirname(__DIR__, 2);
+        $mainPath = dirname(__DIR__, 5);
 
         $fileName = self::getEnv('LOG_' . strtoupper($type) . '_PATH');
 

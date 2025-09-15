@@ -21,7 +21,7 @@ class Bootstrap
     {
         $fileService = new FileService();
         $path = $fileService->findFile('.env');
-        FileService::setEnv($fileService->readEnvFile($path));
+        FileService::setEnv(array_merge($fileService->readEnvFile($path), $_ENV));
     }
 }
 
