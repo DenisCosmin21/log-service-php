@@ -42,6 +42,8 @@ class RequestService
                     $errors = $this->buildServerErrorResponse($resp['error'], count($logs));
                 else if(isset($resp['response']['errors']))
                     $errors = $resp['response']['errors'];
+                else if(isset($resp['response']['message']))
+                    $errors = $this->buildServerErrorResponse($resp['response']['message'], count($logs));
 
 
                 $this->saveFailedLogs($logs, $errors);
