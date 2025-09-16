@@ -8,7 +8,7 @@ class RequestRepository
 
     public function __construct()
     {
-        $this->curl = curl_init("http://logservice-env-1.eba-wtnqyrgy.eu-central-1.elasticbeanstalk.com/api/save_log");
+        $this->curl = curl_init("http://logservice-env-1.eba-wtnqyrgy.eu-central-1.elasticbeanstalk.com/api/save_logs");
         curl_setopt($this->curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($this->curl, CURLOPT_POST, true);
         curl_setopt($this->curl, CURLOPT_HTTPHEADER, [
